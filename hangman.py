@@ -70,6 +70,19 @@ lose = r"""
  ░ ░                                                                 
  """
 
+def get_valid_guess(guessed):
+    while True:
+        guess = input("Enter your Guess (a single letter): ")
+        if len(guess) != 1:
+            print("Please enter exactly one letter.")
+            continue
+        if not guess.isalpha():
+            print("Please enter a valid letter (A-Z).")
+            continue
+        if guess in guessed:
+            print(f"You've already guessed '{guess}'. Try a different letter.")
+            continue
+        return guess
 
 def game():
     lives = 6
@@ -77,6 +90,7 @@ def game():
     word = words[current]
     letters = set(word)
     guesses = random.sample(list(letters), lives)
+    guessed = set()
     print('*' * 100)
     while lives > 0:
         print(states[lives])
@@ -88,9 +102,10 @@ def game():
             else:
                 print('_', end = ' ')
         print()
-        guess = input("Enter your Guess : ")
+        guess = get_valid_guess(guessed)
         if guess in guesses:
             print("Correct Guess!")
+            guessed.add(guess)
             guesses.remove(guess)
             if len(guesses) == 0:
                 break
